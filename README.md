@@ -1,50 +1,39 @@
-# 🚀 Automação de Testes & Performance - BlazeDemo (Lux by Or)
+🌐 Agiblog Automation - UI & Requirement Analysis (Questão 1)
+Objetivo: Automação de testes funcionais para o Blog do Agi, focando na funcionalidade de pesquisa de artigos e integridade da navegação.
+URL: https://blogdoagi.com.br/ Critério: Validação de busca funcional, resultados relevantes e tratamento de exceções.
 
-Este repositório contém a suíte de testes funcionais (BDD) e de performance para o portal **BlazeDemo**, focando no fluxo crítico de compra de passagens aéreas.
+📊 Análise de Engenharia de QA (Arquitetura de Testes):
+Para este desafio, realizei uma Análise de Requisitos e de Negócio completa, transformando a automação em uma "documentação viva" para o time.
+Cobertura Ampliada: Embora o desafio solicitasse 2 cenários, entreguei 5 cenários estratégicos via Gherkin, garantindo uma cobertura resiliente.
+Mapeamento de Requisitos:
+RF (Funcionais): Busca por lupa (RF01), digitação (RF02), resultados (RF03) e categorias (RF04).
+RNF (Não Funcionais): Performance de busca < 3s (RNF01) e usabilidade intuitiva (RNF02).
+RE (Exceção): Busca sem resultados (RE01) e tratamento de campo vazio (RE02).
 
-## 🛠️ Tecnologias Utilizadas
-* **Python 3.9+**
-* **Playwright**: Automação E2E (End-to-End) de alta performance.
-* **Pytest-BDD**: Escrita de cenários em Gherkin para alinhamento com o negócio.
-* **Locust**: Framework de testes de carga baseado em eventos, capaz de gerar alta vazão (RPS).
+🎭 Cenários Automatizados (BDD/Gherkin):
+Cenário 1: Buscar artigo com palavra-chave válida (Caminho Feliz).
+Cenário 2: Buscar artigo inexistente (Validação de mensagem "Nenhum resultado encontrado").
+Cenário 3: Filtrar por categoria (Conta Corrente) após busca.
+Cenário 4: Fluxo completo de abertura de artigo a partir do resultado.
+Cenário 5: Validação de tentativa de busca com campo vazio.
 
----
+🛠️ Tecnologias Utilizadas:
+Python 3.9+
+Playwright: Automação de UI de alta performance.
+Pytest-BDD: Alinhamento técnico entre QA, Negócio e Desenvolvedores Java.
 
-## 🎭 1. Testes Funcionais (E2E)
-Os cenários foram escritos em **Gherkin** para garantir que o fluxo de compra seja validado do ponto de vista do usuário.
 
-### Como executar:
-1. Instale as dependências: `pip install pytest pytest-bdd playwright pytest-html`
-2. Instale os browsers: `playwright install`
-3. Execute: `pytest tests/test_blaze.py --html=evidencias/Relatorio_Funcional.html --self-contained-html`
+🚀 Como Executar:
+Instalar dependências:
+Bash
+pip install pytest pytest-bdd playwright
+playwright install
+      2.   Executar os testes:
+             Bash
+       pytest tests/
+3. Evidências: Vídeos e logs das execuções disponíveis na pasta /evidencias.
 
----
 
-## 📈 2. Testes de Performance (Carga e Pico)
-O objetivo foi validar a resiliência do sistema sob uma carga de **250 Requisições por Segundo (RPS)**.
 
-### Cenário de Teste:
-* **Fluxo:** Home -> Reserva -> Seleção -> Confirmação de Compra.
-* **Critério de Aceitação:** 250 RPS com 90th Percentile < 2.0s.
+Desenvolvido por Luciana (Lux by Or) 💎🛡️
 
-### Como executar:
-1. Instale o Locust: `pip install locust`
-2. Execute o Teste de Carga: 
-   `locust -f tests/test_performance_blaze.py --headless -u 100 -r 10 -t 1m --html evidencias/Relatorio_Carga.html --host https://www.blazedemo.com`
-
----
-
-## 📊 Relatório de Execução e Análise Técnica (IMPORTANTE)
-
-### Resultado Obtido:
-* **Vazão Máxima Estável:** ~120 - 150 RPS.
-* **90th Percentile:** Variou entre 1.8s e 4.5s sob carga máxima.
-* **Status do Critério de Aceitação:** ❌ **Não Satisfeito.**
-
-### Motivação e Conclusão:
-1. **Infraestrutura Limitada:** O ambiente `blazedemo.com` é um serviço público para fins didáticos. Ao atingir a marca de 180+ RPS, o servidor apresentou erros `504 Gateway Timeout` e `502 Bad Gateway`.
-2. **Degradação de Performance:** O tempo de resposta (90th percentile) excedeu os 2 segundos assim que a concorrência ultrapassou 150 usuários simultâneos, indicando que o escalonamento horizontal (Horizontal Pod Autoscaling) ou o balanceamento de carga do ambiente não suporta a vazão solicitada.
-3. **Recomendação:** Para atingir 250 RPS estáveis, seria necessário um ambiente de Staging com recursos de CPU/Memória dedicados e otimização na camada de persistência de dados (Banco de Dados).
-
----
-**Desenvolvido com rigor técnico por Luciana (Lux by Or) 💎🛡️**
