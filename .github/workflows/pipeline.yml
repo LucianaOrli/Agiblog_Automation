@@ -23,7 +23,10 @@ jobs:
 
     - name: Install Playwright Browsers
       run: playwright install --with-deps
-
+    - name: Run tests
+      run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd):$(pwd)/testes
+        pytest -v --html=report.html --self-contained-html
     - name: Run tests
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd):$(pwd)/testes
