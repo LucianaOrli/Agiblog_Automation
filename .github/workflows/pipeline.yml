@@ -27,7 +27,6 @@ jobs:
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd):$(pwd)/testes
         pytest -v --html=report.html --self-contained-html
-    - name: Run tests
-      run: |
+   
         export PYTHONPATH=$PYTHONPATH:$(pwd):$(pwd)/testes
         pytest -v --html=report.html --self-contained-html
