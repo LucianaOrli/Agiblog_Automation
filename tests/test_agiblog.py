@@ -1,13 +1,19 @@
 import pytest
+import sys
+import os
 from pytest_bdd import scenarios, given, when, then
 from playwright.sync_api import Page, expect
-from .agiblog_page import AgiBlogPage # Importando nossa classe
 
+# --- AJUSTE DE SENIOR: Garante que o Python encontre o arquivo agiblog_page.py ---
+sys.path.append(os.path.dirname(__file__))
+from agiblog_page import AgiBlogPage 
+
+# Localização do arquivo de funcionalidade (feature)
 scenarios('../features/agiblog.feature')
 
 @pytest.fixture
 def blog_page(page: Page):
-    # Instancia a classe de página para ser usada nos testes
+    """Instancia a Page Object para ser usada nos steps."""
     return AgiBlogPage(page)
 
 @given('que eu acesso a página inicial do Agiblog')
@@ -16,7 +22,6 @@ def abrir_site(blog_page: AgiBlogPage):
 
 @when('eu clico na lupa de pesquisa')
 def clicar_lupa(blog_page: AgiBlogPage):
-    # Agora a lógica está dentro da Page!
     blog_page.btn_lupa.first.click()
 
 @when('eu digito "empréstimo" no campo de busca')
@@ -49,6 +54,7 @@ def verificar_vazio(blog_page: AgiBlogPage):
 
 @then('a página da categoria deve carregar com sucesso')
 def verificar_categoria(blog_page: AgiBlogPage):
+    # Verifica se a URL mudou (não é mais a home)
     expect(blog_page.page).not_to_have_url("/")
 
 @then('o título do artigo deve estar visível e legível')
