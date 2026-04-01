@@ -20,6 +20,6 @@ jobs:
         pip install pytest pytest-playwright pytest-bdd pytest-base-url pytest-html
     - name: Install Playwright Browsers
       run: playwright install --with-deps
-     
+      
     - name: Run tests
       run: PYTHONPATH=testes pytest testes/
