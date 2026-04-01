@@ -22,8 +22,9 @@ def abrir_site(blog_page: AgiBlogPage):
 
 @when('eu clico na lupa de pesquisa')
 def clicar_lupa(blog_page: AgiBlogPage):
-    blog_page.btn_lupa.first.click()
-
+    # O teste apenas dá a ordem. O "endereço" fica no outro arquivo.
+    blog_page.btn_lupa.first.click
+    
 @when('eu digito "empréstimo" no campo de busca')
 def digitar_termo(blog_page: AgiBlogPage):
     blog_page.campo_busca.first.fill("empréstimo")
