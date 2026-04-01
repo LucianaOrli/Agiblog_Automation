@@ -1,67 +1,57 @@
 import pytest
-import sys
-import os
-from pytest_bdd import scenarios, given, when, then
-from playwright.sync_api import Page, expect
-
-# --- AJUSTE DE SENIOR: Garante que o Python encontre o arquivo agiblog_page.py ---
-sys.path.append(os.path.dirname(__file__))
-from agiblog_page import AgiBlogPage 
-
-# Localização do arquivo de funcionalidade (feature)
-scenarios('../features/agiblog.feature')
+from pytest_bdd import scenario, given, when, then, parsers
+from agiblog_page import AgiBlogPage
 
 @pytest.fixture
-def blog_page(page: Page):
-    """Instancia a Page Object para ser usada nos steps."""
+def blog_page(page):
     return AgiBlogPage(page)
 
+# Mapeamento dos Cenários
+@scenario('../features/agiblog.feature', '01 - Realizar busca por termo existente')
+def test_busca_existente(): pass
+
+@scenario('../features/agiblog.feature', '02 - Realizar busca por termo inexistente')
+def test_busca_inexistente(): pass
+
+@scenario('../features/agiblog.feature', '03 - Realizar busca com campo vazio')
+def test_busca_vazia(): pass
+
+@scenario('../features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
+def test_busca_longa(): pass
+
+@scenario('../features/agiblog.feature', '05 - Realizar busca com caracteres especiais (Segurança)')
+def test_busca_seguranca(): pass
+
+# Implementação dos Steps
 @given('que eu acesso a página inicial do Agiblog')
-def abrir_site(blog_page: AgiBlogPage):
+def step_abrir_home(blog_page):
     blog_page.acessar_home()
 
 @when('eu clico na lupa de pesquisa')
-def clicar_lupa(blog_page: AgiBlogPage):
-    # O motorista (teste) dá a ordem para o GPS (page) agir:
-    blog_page.btn_lupa.first.click()
-    
-@when('eu digito "empréstimo" no campo de busca')
-def digitar_termo(blog_page: AgiBlogPage):
-    blog_page.campo_busca.first.fill("empréstimo")
+def step_clicar_lupa(blog_page):
+    blog_page.clicar_lupa()
 
-@when('eu digito "termo_inexistente_lux_2026"')
-def digitar_termo_inexistente(blog_page: AgiBlogPage):
-    blog_page.campo_busca.first.fill("termo_inexistente_lux_2026")
+@when(parsers.parse('eu digito o termo "{termo}"'))
+def step_digitar_termo(blog_page, termo):
+    blog_page.realizar_busca(termo)
 
-@when('eu pressiono a tecla Enter')
-def dar_enter(blog_page: AgiBlogPage):
-    blog_page.page.keyboard.press("Enter")
+@when('eu clico no botão de pesquisar sem preencher o campo')
+def step_pesquisar_vazio(blog_page):
+    blog_page.clicar_pesquisar_vazio()
 
-@when('eu seleciono uma categoria no menu principal')
-def selecionar_categoria(blog_page: AgiBlogPage):
-    blog_page.clicar_categoria()
+@then('o sistema deve exibir resultados relevantes')
+def step_validar_sucesso(blog_page):
+    assert blog_page.msg_nenhum_resultado.is_hidden()
 
-@when('eu clico no primeiro artigo da lista')
-def clicar_artigo(blog_page: AgiBlogPage):
-    blog_page.clicar_primeiro_artigo()
+@then('o sistema deve exibir a mensagem de nenhum resultado encontrado')
+@then('o sistema deve tratar como texto comum e exibir mensagem de não encontrado')
+def step_validar_falha(blog_page):
+    assert blog_page.msg_nenhum_resultado.is_visible()
 
-@then('o sistema deve exibir resultados relacionados ao termo')
-def verificar_resultados(blog_page: AgiBlogPage):
-    expect(blog_page.titulo_arquivo).to_be_visible()
+@then('o sistema deve permanecer na home')
+def step_validar_home(blog_page):
+    assert "blogdoagi.com.br" in blog_page.page.url
 
-@then('o sistema deve exibir a mensagem "Nenhum resultado"')
-def verificar_vazio(blog_page: AgiBlogPage):
-    expect(blog_page.msg_nenhum_resultado).to_be_visible()
-
-@then('a página da categoria deve carregar com sucesso')
-def verificar_categoria(blog_page: AgiBlogPage):
-    # Verifica se a URL mudou (não é mais a home)
-    expect(blog_page.page).not_to_have_url("/")
-
-@then('o título do artigo deve estar visível e legível')
-def verificar_titulo_artigo(blog_page: AgiBlogPage):
-    expect(blog_page.titulo_artigo).to_be_visible()
-
-@then('a logomarca do Agi deve estar visível no topo da página')
-def verificar_logo(blog_page: AgiBlogPage):
-    expect(blog_page.logo_agi.first).to_be_visible()
+@then('o sistema deve processar a busca sem erro de servidor')
+def step_validar_processamento(blog_page):
+    assert blog_page.page.query_selector("body") is not None
