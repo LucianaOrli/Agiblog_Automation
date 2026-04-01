@@ -18,5 +18,5 @@ Funcionalidade: Testes de Busca no Agiblog
     Então o sistema deve permanecer na home
 
   Cenário: 04 - Realizar busca com termo excessivamente longo
-    Quando eu digito o termo "A" repetido duzentas vezes
+    Quando eu digito o termo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     Então o sistema deve processar a busca sem erro de servidor
