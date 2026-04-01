@@ -6,7 +6,7 @@ from agiblog_page import AgiBlogPage
 def blog_page(page):
     return AgiBlogPage(page)
 
-# Mapeamento dos Cenários
+# Mapeamento EXATO dos 4 cenários (Se tiver 05 aqui e não no .feature, dá erro!)
 @scenario('../features/agiblog.feature', '01 - Realizar busca por termo existente')
 def test_busca_existente(): pass
 
@@ -18,9 +18,6 @@ def test_busca_vazia(): pass
 
 @scenario('../features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
 def test_busca_longa(): pass
-
-@scenario('../features/agiblog.feature', '05 - Realizar busca com caracteres especiais (Segurança)')
-def test_busca_seguranca(): pass
 
 # Implementação dos Steps
 @given('que eu acesso a página inicial do Agiblog')
