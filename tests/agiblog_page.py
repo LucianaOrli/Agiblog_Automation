@@ -3,8 +3,9 @@ from playwright.sync_api import Page
 class AgiBlogPage:
     def __init__(self, page: Page):
         self.page = page
-        # Seletores atualizados para serem mais precisos:
-        self.btn_lupa = page.locator("a.search-show") # Tente este seletor de classe
+        # A linha estratégica DEVE ficar aqui:
+        self.btn_lupa = page.locator("#search-open, .search-show, .ast-search-menu-icon, [aria-label='Link de pesquisa']")
+        # ... (restante dos seletores)
         self.campo_busca = page.get_by_placeholder("Pesquisar …") # Busca pelo texto dentro do campo
         self.msg_nenhum_resultado = page.get_by_text("Nenhum resultado")
         self.titulo_arquivo = page.locator("h1.archive-title")
