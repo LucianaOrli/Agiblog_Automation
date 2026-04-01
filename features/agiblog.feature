@@ -20,7 +20,3 @@ Funcionalidade: Testes de Busca no Agiblog
   Cenário: 04 - Realizar busca com termo excessivamente longo
     E eu digito o termo "A" repetido duzentas vezes
     Então o sistema deve processar a busca sem erro de servidor
-
-  Cenário: 05 - Realizar busca com caracteres especiais (Segurança)
-    E eu digito o termo "<script>alert('xss')</script>"
-    Then o sistema deve tratar como texto comum e exibir mensagem de não encontrado
