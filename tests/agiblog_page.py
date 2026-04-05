@@ -1,57 +1,25 @@
-import pytest
-from pytest_bdd import scenario, given, when, then, parsers
-from agiblog_page import AgiBlogPage
+from playwright.sync_api import Page
 
-@pytest.fixture
-def blog_page(page):
-    return AgiBlogPage(page)
+class AgiBlogPage:
+    def __init__(self, page: Page):
+        self.page = page
+        # Seletor resiliente
+        self.btn_lupa = page.locator("#search-open, .search-toggle, [aria-label='Abrir pesquisa']").first
+        self.campo_busca = page.locator(".search-field").first 
+        self.msg_nenhum_resultado = page.locator(".no-results, .not-found, text='Nenhum resultado'").first
 
-# Mapeamento dos 4 cenários (Caminho ajustado para CI/CD)
-@scenario('features/agiblog.feature', '01 - Realizar busca por termo existente')
-def test_busca_existente(): pass
+    def acessar_home(self):
+        self.page.goto("https://blog.agibank.com.br/")
 
-@scenario('features/agiblog.feature', '02 - Realizar busca por termo inexistente')
-def test_busca_inexistente(): pass
+    def clicar_lupa(self):
+        self.btn_lupa.wait_for(state="visible", timeout=10000)
+        self.btn_lupa.click()
 
-@scenario('features/agiblog.feature', '03 - Realizar busca com campo vazio')
-def test_busca_vazia(): pass
+    def realizar_busca(self, termo):
+        self.campo_busca.wait_for(state="visible")
+        self.campo_busca.fill(termo)
+        self.page.keyboard.press("Enter")
 
-@scenario('features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
-def test_busca_longa(): pass
-
-# Implementação dos Steps
-@given('que eu acesso a página inicial do Agiblog')
-def step_abrir_home(blog_page):
-    blog_page.acessar_home()
-
-@when('eu clico na lupa de pesquisa')
-def step_clicar_lupa(blog_page):
-    # Usa o método resiliente do Page Object
-    blog_page.clicar_lupa()
-
-@when(parsers.parse('eu digito o termo "{termo}"'))
-def step_digitar_termo(blog_page, termo):
-    blog_page.realizar_busca(termo)
-
-@when('eu clico no botão de pesquisar sem preencher o campo')
-def step_pesquisar_vazio(blog_page):
-    blog_page.clicar_pesquisar_vazio()
-
-@then('o sistema deve exibir resultados relevantes')
-def step_validar_sucesso(blog_page):
-    # Pequena espera para garantir que a busca processou
-    blog_page.page.wait_for_load_state("networkidle")
-    assert blog_page.msg_nenhum_resultado.is_hidden()
-
-@then('o sistema deve exibir a mensagem de nenhum resultado encontrado')
-@then('o sistema deve tratar como texto comum e exibir mensagem de não encontrado')
-def step_validar_falha(blog_page):
-    assert blog_page.msg_nenhum_resultado.is_visible()
-
-@then('o sistema deve permanecer na home')
-def step_validar_home(blog_page):
-    assert "agibank.com.br" in blog_page.page.url
-
-@then('o sistema deve processar a busca sem erro de servidor')
-def step_validar_processamento(blog_page):
-    assert blog_page.page.query_selector("body") is not None
+    def clicar_pesquisar_vazio(self):
+        self.campo_busca.wait_for(state="visible")
+        self.page.keyboard.press("Enter")
