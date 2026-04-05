@@ -6,17 +6,17 @@ from agiblog_page import AgiBlogPage
 def blog_page(page):
     return AgiBlogPage(page)
 
-# Mapeamento dos 4 cenários (Caminho ajustado para CI/CD)
-@scenario('features/agiblog.feature', '01 - Realizar busca por termo existente')
+# Mapeamento dos 4 cenários (Ajustado para subir um nível e achar a pasta features)
+@scenario('../features/agiblog.feature', '01 - Realizar busca por termo existente')
 def test_busca_existente(): pass
 
-@scenario('features/agiblog.feature', '02 - Realizar busca por termo inexistente')
+@scenario('../features/agiblog.feature', '02 - Realizar busca por termo inexistente')
 def test_busca_inexistente(): pass
 
-@scenario('features/agiblog.feature', '03 - Realizar busca com campo vazio')
+@scenario('../features/agiblog.feature', '03 - Realizar busca com campo vazio')
 def test_busca_vazia(): pass
 
-@scenario('features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
+@scenario('../features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
 def test_busca_longa(): pass
 
 # Implementação dos Steps
