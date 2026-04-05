@@ -6,17 +6,17 @@ from agiblog_page import AgiBlogPage
 def blog_page(page):
     return AgiBlogPage(page)
 
-# Mapeamento EXATO dos 4 cenários (Se tiver 05 aqui e não no .feature, dá erro!)
-@scenario('../features/agiblog.feature', '01 - Realizar busca por termo existente')
+# Mapeamento dos 4 cenários (Caminho ajustado para CI/CD)
+@scenario('features/agiblog.feature', '01 - Realizar busca por termo existente')
 def test_busca_existente(): pass
 
-@scenario('../features/agiblog.feature', '02 - Realizar busca por termo inexistente')
+@scenario('features/agiblog.feature', '02 - Realizar busca por termo inexistente')
 def test_busca_inexistente(): pass
 
-@scenario('../features/agiblog.feature', '03 - Realizar busca com campo vazio')
+@scenario('features/agiblog.feature', '03 - Realizar busca com campo vazio')
 def test_busca_vazia(): pass
 
-@scenario('../features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
+@scenario('features/agiblog.feature', '04 - Realizar busca com termo excessivamente longo')
 def test_busca_longa(): pass
 
 # Implementação dos Steps
@@ -26,6 +26,7 @@ def step_abrir_home(blog_page):
 
 @when('eu clico na lupa de pesquisa')
 def step_clicar_lupa(blog_page):
+    # Usa o método resiliente do Page Object
     blog_page.clicar_lupa()
 
 @when(parsers.parse('eu digito o termo "{termo}"'))
@@ -38,6 +39,8 @@ def step_pesquisar_vazio(blog_page):
 
 @then('o sistema deve exibir resultados relevantes')
 def step_validar_sucesso(blog_page):
+    # Pequena espera para garantir que a busca processou
+    blog_page.page.wait_for_load_state("networkidle")
     assert blog_page.msg_nenhum_resultado.is_hidden()
 
 @then('o sistema deve exibir a mensagem de nenhum resultado encontrado')
@@ -47,7 +50,6 @@ def step_validar_falha(blog_page):
 
 @then('o sistema deve permanecer na home')
 def step_validar_home(blog_page):
-    # Aceita tanto blogdoagi quanto agibank
     assert "agibank.com.br" in blog_page.page.url
 
 @then('o sistema deve processar a busca sem erro de servidor')
