@@ -26,7 +26,6 @@ def step_abrir_home(blog_page):
 
 @when('eu clico na lupa de pesquisa')
 def step_clicar_lupa(blog_page):
-    # Usa o método resiliente do Page Object
     blog_page.clicar_lupa()
 
 @when(parsers.parse('eu digito o termo "{termo}"'))
@@ -39,7 +38,6 @@ def step_pesquisar_vazio(blog_page):
 
 @then('o sistema deve exibir resultados relevantes')
 def step_validar_sucesso(blog_page):
-    # Pequena espera para garantir que a busca processou
     blog_page.page.wait_for_load_state("networkidle")
     assert blog_page.msg_nenhum_resultado.is_hidden()
 
